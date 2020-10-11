@@ -25,26 +25,22 @@ public class StreamAddressSystem {
 		{
 			System.out.println("Do you want to view person by city or state (Y/N-y/n): ");
 			char ch=sc.next().charAt(0);
+			
 			if(ch=='N' || ch=='n')
 			System.out.println("User does not want to view person by city or state.");
 			else
 			{
 				System.out.println("Enter the City or State Name to search the person :");
 				String cityOrStateName = sc.nextLine();
-				for(String key : addressBook.keySet())
-				{
+				addressBook.keySet().stream().forEach( key -> {
 					AddressSystemMain mainObj = addressBook.get(key);
-					List<Contacts> tempList = mainObj.getContactList();
-					for (Contacts index : tempList) 
-					{
-						if (index.getStateName().equalsIgnoreCase(cityOrStateName) || index.getCityName().equalsIgnoreCase(cityOrStateName))
-							System.out.println("Person is present in inputted city or state.");
-						else
-							System.out.println("Person is not present in inputted city or state.");
-					}
-				}
-			}
-		}
+					mainObj.getContactList().stream().filter(name ->
+					name.getStateName().equalsIgnoreCase(cityOrStateName) || name.getCityName().equalsIgnoreCase(cityOrStateName))
+							.forEach(person -> System.out.println((person.getFirstName()+" "+person.getLastName()) 
+							+ "is present in City or State: " + cityOrStateName));
+			});
+		}			
+	}
 		public Map<String, List<String>> dictionaryOfCity_Person()
 		{
 			System.out.println("Enter the City Name to maintain CITY_PERSONS dictionary :");
