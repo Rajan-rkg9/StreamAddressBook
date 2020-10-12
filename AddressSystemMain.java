@@ -178,6 +178,7 @@ public class AddressSystemMain {
 			mainObj.checkDuplicateEntryOfName();
 			addressObj.viewPersonByCityOrState();
 			addressObj.dictionaryOfState_PersonsAndCity_Persons();
+			addressObj.showCountOfPersonsByCityAndState();
 			
 		}
 }

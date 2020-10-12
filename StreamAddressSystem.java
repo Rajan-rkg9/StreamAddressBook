@@ -4,10 +4,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class StreamAddressSystem {
-	    public Map<String, AddressSystemMain> addressBook = new TreeMap<String,AddressSystemMain>();
+	    static public Map<String, AddressSystemMain> addressBook = new TreeMap<String,AddressSystemMain>();
 	    Scanner sc = new Scanner(System.in);
-	    public Map<String, List<Contacts>> cityPersonsMap;
-		public Map<String, List<Contacts>> statePersonsMap;
+	    static public Map<String, List<Contacts>> cityPersonsMap;
+		static public Map<String, List<Contacts>> statePersonsMap;
 
 	    
 		public  void showAddressBooks() {
@@ -67,6 +67,23 @@ public class StreamAddressSystem {
 			List<Contacts> statePerson = mainObj.getContactList().stream()
 					.filter(contact -> contact.getStateName().equals(stateName)).collect(Collectors.toList());
 			statePersonsMap.put(stateName, statePerson);
+		});
+	}
+	
+	/**
+	 * UC10
+	 */
+	public static void showCountOfPersonsByCityAndState()
+	{
+		addressBook.keySet().stream().forEach(key -> {
+			AddressSystemMain mainObj = addressBook.get(key);
+			System.out.println("In the address book " + key);
+			System.out.println("Persons Count by City");
+			StreamAddressSystem.cityPersonsMap.keySet().stream().forEach(
+					cityName -> System.out.println(cityName + ": " + StreamAddressSystem.cityPersonsMap.get(cityName).size()));
+			System.out.println("Persons Count by State:");
+			StreamAddressSystem.statePersonsMap.keySet().stream().forEach(
+					stateName -> System.out.println(stateName + ": " + StreamAddressSystem.statePersonsMap.get(stateName).size()));
 		});
 	}
 }
