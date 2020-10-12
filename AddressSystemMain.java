@@ -177,8 +177,7 @@ public class AddressSystemMain {
 			addressObj.showAddressBooks();
 			mainObj.checkDuplicateEntryOfName();
 			addressObj.viewPersonByCityOrState();
-			addressObj.dictionaryOfCity_Person();
-			addressObj.dictionaryOfState_Person();
-			addressObj.showCountOfPersonsByCityAndState();
+			addressObj.dictionaryOfState_PersonsAndCity_Persons();
+			
 		}
 }

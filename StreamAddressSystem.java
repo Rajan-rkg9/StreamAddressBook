@@ -1,12 +1,13 @@
 package com.stream.AddressBook;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class StreamAddressSystem {
 	    public Map<String, AddressSystemMain> addressBook = new TreeMap<String,AddressSystemMain>();
 	    Scanner sc = new Scanner(System.in);
-	    public Map<String, List<String>> cityPersonsMap;
-		public Map<String, List<String>> statePersonsMap;
+	    public Map<String, List<Contacts>> cityPersonsMap;
+		public Map<String, List<Contacts>> statePersonsMap;
 
 	    
 		public  void showAddressBooks() {
@@ -31,7 +32,7 @@ public class StreamAddressSystem {
 			else
 			{
 				System.out.println("Enter the City or State Name to search the person :");
-				String cityOrStateName = sc.nextLine();
+				String cityOrStateName = sc.nextLine(); 
 				addressBook.keySet().stream().forEach( key -> {
 					AddressSystemMain mainObj = addressBook.get(key);
 					mainObj.getContactList().stream().filter(name ->
@@ -41,64 +42,31 @@ public class StreamAddressSystem {
 			});
 		}			
 	}
-		public Map<String, List<String>> dictionaryOfCity_Person()
-		{
-			System.out.println("Enter the City Name to maintain CITY_PERSONS dictionary :");
-			String cityName = sc.nextLine();
-			cityPersonsMap = new HashMap<>();
-			List<String> cityPerson = new ArrayList<>();
-			for(String key : addressBook.keySet())
-			{
-				AddressSystemMain mainObj = addressBook.get(key);
-				List<Contacts> tempList = mainObj.getContactList();
-				for (Contacts index : tempList) 
-				{
-					if (index.getCityName().equalsIgnoreCase(cityName))
-					{
-						cityPerson.add((index.getFirstName() + " " + index.getLastName()));
-						cityPersonsMap.put(cityName, cityPerson);
-					}
-				}
-			}
-			return cityPersonsMap ;
-		}
-		public Map<String, List<String>> dictionaryOfState_Person()
-		{
-			System.out.println("Enter the State Name to maintain STATE_PERSONS dictionary :");
-			String stateName = sc.nextLine();
-			statePersonsMap = new HashMap<>();
-			List<String> statePerson = new ArrayList<>();
-			for(String key : addressBook.keySet())
-			{
-				AddressSystemMain mainObj = addressBook.get(key);
-				List<Contacts> tempList = mainObj.getContactList();
-				for (Contacts index : tempList) 
-				{
-					if (index.getStateName().equalsIgnoreCase(stateName))
-					{
-						statePerson.add((index.getFirstName() + " " + index.getLastName()));
-						statePersonsMap.put(stateName, statePerson);
-					}
-				}
-			}
-			return statePersonsMap ;
-		}
-		public void showCountOfPersonsByCityAndState()
-		{
-			Set<String> cityKey = dictionaryOfCity_Person().keySet();
-			Set<String> stateKey = dictionaryOfState_Person().keySet();
-			String city = "" , state = "" ;
-			for(String stateObj : cityKey)
-			{
-				state = stateObj;
-				break;
-			}
-			for(String cityObj : stateKey)
-			{
-				city = cityObj;
-				break;
-			}
-			System.out.println("Total number of persons in City :" + city + " is :- " + cityKey.size());
-			System.out.println("Total number of persons in State :" + state + " is :- " + stateKey.size());
-		}
+	
+	
+	/**
+	 * UC9
+	 */
+	public void dictionaryOfState_PersonsAndCity_Persons() 
+	{
+		System.out.println("Enter the City Name to maintain CITY_PERSONS dictionary :");
+		String cityName = sc.nextLine();
+		System.out.println("Enter the State Name to maintain STATE_PERSONS dictionary :");
+		String stateName = sc.nextLine();
+		cityPersonsMap = new HashMap<>();
+		statePersonsMap = new HashMap<>();
+		addressBook.keySet().stream().forEach( key -> {
+			AddressSystemMain mainObj = addressBook.get(key);
+			List<Contacts> cityPerson = mainObj.getContactList().stream()
+					.filter(contact -> contact.getCityName().equals(cityName)).collect(Collectors.toList());
+			cityPersonsMap.put(cityName, cityPerson);
+		});
+		
+		addressBook.keySet().stream().forEach( key -> {
+			AddressSystemMain mainObj = addressBook.get(key);
+			List<Contacts> statePerson = mainObj.getContactList().stream()
+					.filter(contact -> contact.getStateName().equals(stateName)).collect(Collectors.toList());
+			statePersonsMap.put(stateName, statePerson);
+		});
+	}
 }
