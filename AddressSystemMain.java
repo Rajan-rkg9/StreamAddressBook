@@ -149,7 +149,7 @@ public class AddressSystemMain {
 				System.out.println("Already a person with similar details exists.");
 		}
 		/**
-		 * UC10
+		 * UC11
 		 */
 		public void sortContactsByName() {
 			contactList=contactList.stream().sorted((c1,c2)->c1.getFirstName().compareTo(c2.getFirstName())).collect(Collectors.toList());
