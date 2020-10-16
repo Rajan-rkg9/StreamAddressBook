@@ -1,5 +1,6 @@
 package com.stream.AddressBook;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.io.*;
 public class AddressSystemMain {
 	
@@ -147,6 +148,12 @@ public class AddressSystemMain {
 			else
 				System.out.println("Already a person with similar details exists.");
 		}
+		/**
+		 * UC10
+		 */
+		public void sortContactsByName() {
+			contactList=contactList.stream().sorted((c1,c2)->c1.getFirstName().compareTo(c2.getFirstName())).collect(Collectors.toList());
+		}
 		public static void main(String[] args) {
 			AddressSystemMain mainObj = new AddressSystemMain();
 			StreamAddressSystem addressObj = new StreamAddressSystem();
@@ -178,7 +185,7 @@ public class AddressSystemMain {
 			mainObj.checkDuplicateEntryOfName();
 			addressObj.viewPersonByCityOrState();
 			addressObj.dictionaryOfState_PersonsAndCity_Persons();
-			addressObj.showCountOfPersonsByCityAndState();
+			StreamAddressSystem.showCountOfPersonsByCityAndState();
 			
 		}
 }
