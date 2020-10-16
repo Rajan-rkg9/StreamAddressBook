@@ -1,6 +1,9 @@
 package com.stream.AddressBook;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import org.graalvm.compiler.nodes.NodeView.Default;
+
 import java.io.*;
 public class AddressSystemMain {
 	
@@ -149,10 +152,27 @@ public class AddressSystemMain {
 				System.out.println("Already a person with similar details exists.");
 		}
 		/**
-		 * UC10
+		 * UC11
 		 */
 		public void sortContactsByName() {
 			contactList=contactList.stream().sorted((c1,c2)->c1.getFirstName().compareTo(c2.getFirstName())).collect(Collectors.toList());
+		}
+		
+		/**
+		 * UC12
+		 */
+		public List<Contacts> sortContactsByCityOrStateOrZip(){
+			System.out.println("Press 1 to sort by city ,2 to sort by state , to sort by zip code");
+			int choice = sc.nextInt();
+			switch(choice) {
+			case 1:
+				return contactList.stream().sorted((c1,c2)->c1.getCityName().compareTo(c2.getCityName())).collect(Collectors.toList());
+			case 2:
+				return contactList.stream().sorted((c1,c2)->c1.getStateName().compareTo(c2.getStateName())).collect(Collectors.toList());
+			case 3:
+				return contactList.stream().sorted((c1,c2)->(c1.getZipCode()).compareTo(c2.getZipCode())).collect(Collectors.toList());
+			}
+			return contactList;
 		}
 		public static void main(String[] args) {
 			AddressSystemMain mainObj = new AddressSystemMain();
@@ -186,6 +206,8 @@ public class AddressSystemMain {
 			addressObj.viewPersonByCityOrState();
 			addressObj.dictionaryOfState_PersonsAndCity_Persons();
 			StreamAddressSystem.showCountOfPersonsByCityAndState();
+			mainObj.sortContactsByName();
+			mainObj.sortContactsByCityOrStateOrZip();
 			
 		}
 }
