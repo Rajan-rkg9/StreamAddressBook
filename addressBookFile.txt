@@ -1,0 +1,2 @@
+rajan,kumar,amiar@gmail.com,panki,address,822122,jhar,9876543201
+rohan,kumar,rohan@gmail.com,ranchi,address,822762,jhar,9865454201

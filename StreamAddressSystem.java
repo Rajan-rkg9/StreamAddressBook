@@ -35,7 +35,7 @@ public class StreamAddressSystem {
 				String cityOrStateName = sc.nextLine(); 
 				addressBook.keySet().stream().forEach( key -> {
 					AddressSystemMain mainObj = addressBook.get(key);
-					mainObj.getContactList().stream().filter(name ->
+					mainObj.addressFileObj.readAddressBookFromAFile().stream().filter(name ->
 					name.getStateName().equalsIgnoreCase(cityOrStateName) || name.getCityName().equalsIgnoreCase(cityOrStateName))
 							.forEach(person -> System.out.println((person.getFirstName()+" "+person.getLastName()) 
 							+ "is present in City or State: " + cityOrStateName));
@@ -57,14 +57,14 @@ public class StreamAddressSystem {
 		statePersonsMap = new HashMap<>();
 		addressBook.keySet().stream().forEach( key -> {
 			AddressSystemMain mainObj = addressBook.get(key);
-			List<Contacts> cityPerson = mainObj.getContactList().stream()
+			List<Contacts> cityPerson = mainObj.addressFileObj.readAddressBookFromAFile().stream()
 					.filter(contact -> contact.getCityName().equals(cityName)).collect(Collectors.toList());
 			cityPersonsMap.put(cityName, cityPerson);
 		});
 		
 		addressBook.keySet().stream().forEach( key -> {
 			AddressSystemMain mainObj = addressBook.get(key);
-			List<Contacts> statePerson = mainObj.getContactList().stream()
+			List<Contacts> statePerson = mainObj.addressFileObj.readAddressBookFromAFile().stream()
 					.filter(contact -> contact.getStateName().equals(stateName)).collect(Collectors.toList());
 			statePersonsMap.put(stateName, statePerson);
 		});

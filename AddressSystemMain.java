@@ -2,23 +2,23 @@ package com.stream.AddressBook;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.graalvm.compiler.nodes.NodeView.Default;
-
 import java.io.*;
 public class AddressSystemMain {
 	
 		public  static  List<Contacts> contactList = new ArrayList<>();
 		public static Map<String, Contacts > addressMap = new HashMap<>();
 	    static Scanner sc = new Scanner(System.in);
-		public List<Contacts> getContactList() {
+	    public AddressFileIO addressFileObj;
+	    public List<Contacts> getContactList() {
 			return contactList;
 		}
 
 		public void setContactList(List<Contacts> list) {
 			this.contactList = list;
 		}
-		public void addContact()
+		public void addContact(String addBookName)
 		{
+			addressFileObj = new AddressFileIO(addBookName + ".txt");
 			System.out.println("Enter the number of persons whose contact details are to be added: ");
 			int noOfPersons=sc.nextInt();
 			sc.nextLine();
@@ -43,6 +43,7 @@ public class AddressSystemMain {
 					String ei=sc.nextLine();
 					Contacts contactObj = new Contacts(fn,ln,ei,c,add,zc,s,pn);
 					contactList.add(contactObj);
+					addressFileObj.writeContactDetailsInAFile(contactList);
 					addressMap.put(contactObj.getFirstName(), contactObj);
 			}
 		}
@@ -51,6 +52,7 @@ public class AddressSystemMain {
 		{
 			int x;
 			boolean flag = true;
+			contactList = addressFileObj.readAddressBookFromAFile();
 			System.out.println("Do you want to edit contact details (Y/N-y/n): ");
 			char ch=sc.next().charAt(0);
 			sc.nextLine();
@@ -89,11 +91,7 @@ public class AddressSystemMain {
 						Contacts contactObj = new Contacts(fn,ln,ei,c,add,zc,s,pn);
 						contactList.set(i, contactObj);
 						System.out.println("Contact details of "+editN+" edited successfully! Updated Details are: ");
-						for(int j=0;j<contactList.size();j++)
-						{
-							System.out.println("Contact Details of Person "+(j+1)+" :");
-							System.out.println(contactList.get(j));
-						}
+						addressFileObj.writeContactDetailsInAFile(contactList);
 						x=1;
 						flag= false;
 						break;
@@ -106,6 +104,7 @@ public class AddressSystemMain {
 		public void removeContact() {
 			boolean flag = true;
 			int x;
+			contactList = addressFileObj.readAddressBookFromAFile();
 			System.out.println("Do you want to remove contact details (Y/N-y/n): ");
 			char ch=sc.next().charAt(0);
 			sc.nextLine();
@@ -125,11 +124,7 @@ public class AddressSystemMain {
 					{
 						contactList.remove(x);
 						System.out.println("Contact Details removed successfully!! Updated Details are: ");
-						for(int j=0;j<contactList.size();j++)
-						{
-							System.out.println("Contact Details of Person "+(j+1)+" :");					
-							System.out.println(contactList.get(j));
-						}
+						addressFileObj.writeContactDetailsInAFile(contactList);
 						x=1;
 						flag = false;
 						break;
@@ -145,6 +140,7 @@ public class AddressSystemMain {
 			System.out.println("Enter first and last name to check for repeatition :");
 			String firstName = sc.nextLine();
 			String lastName = sc.nextLine();
+			contactList = addressFileObj.readAddressBookFromAFile();
 			counter = contactList.stream().filter( (conObj) ->  (conObj.getFirstName() +" " + conObj.getLastName()).equals(firstName + " " + lastName)).count();
 		    if(counter==0)
 				System.out.println("Duplicate entry does not exist.");
@@ -155,24 +151,25 @@ public class AddressSystemMain {
 		 * UC11
 		 */
 		public void sortContactsByName() {
+			contactList = addressFileObj.readAddressBookFromAFile();
 			contactList=contactList.stream().sorted((c1,c2)->c1.getFirstName().compareTo(c2.getFirstName())).collect(Collectors.toList());
 		}
 		
 		/**
 		 * UC12
 		 */
-		public List<Contacts> sortContactsByCityOrStateOrZip(){
+		public void sortContactsByCityOrStateOrZip(){
 			System.out.println("Press 1 to sort by city ,2 to sort by state , to sort by zip code");
 			int choice = sc.nextInt();
+			contactList = addressFileObj.readAddressBookFromAFile();
 			switch(choice) {
 			case 1:
-				return contactList.stream().sorted((c1,c2)->c1.getCityName().compareTo(c2.getCityName())).collect(Collectors.toList());
+				contactList = contactList.stream().sorted((c1,c2)->c1.getCityName().compareTo(c2.getCityName())).collect(Collectors.toList());
 			case 2:
-				return contactList.stream().sorted((c1,c2)->c1.getStateName().compareTo(c2.getStateName())).collect(Collectors.toList());
+				contactList = contactList.stream().sorted((c1,c2)->c1.getStateName().compareTo(c2.getStateName())).collect(Collectors.toList());
 			case 3:
-				return contactList.stream().sorted((c1,c2)->(c1.getZipCode()).compareTo(c2.getZipCode())).collect(Collectors.toList());
+				contactList = contactList.stream().sorted((c1,c2)->(c1.getZipCode()).compareTo(c2.getZipCode())).collect(Collectors.toList());
 			}
-			return contactList;
 		}
 		public static void main(String[] args) {
 			AddressSystemMain mainObj = new AddressSystemMain();
@@ -185,7 +182,7 @@ public class AddressSystemMain {
 					System.out.println("Address Book with same name already exists");
 				else {
 					System.out.println("Enter Details for " + addressBookName);
-					mainObj.addContact();
+					mainObj.addContact(addressBookName);
 					addressObj.addressBook.put(addressBookName,mainObj);
 				}
 				System.out.println("Do you want to add more Address Books (y/n)");
